@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CWF — Salesforce as an Intelligent Operating System</title>
+<meta name="description" content="A plan to turn Salesforce into an intelligent operating system for Chicago Water & Fire Restoration: account intelligence, opportunity scoring, referral intelligence and OpenAI in Flow. Prepared by CrewNexa." />
+<style>
+  :root{
+    --bg:#0a121f; --bg2:#0f1c30; --card:#102035; --line:#20344f; --ink:#eaf2fb;
+    --muted:#9db6d4; --blue:#2a7fff; --sky:#38bdf8; --violet:#a78bfa; --green:#34d399; --amber:#fbbf24;
+    --shadow:0 14px 40px rgba(0,0,0,.42);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(10,18,31,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .navin{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+  .dot{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--blue),var(--sky))}
+  .navlinks{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+  .navlinks a:hover{color:var(--ink)}
+  .cta{background:linear-gradient(135deg,var(--blue),var(--sky));color:#04101f;padding:9px 16px;border-radius:8px;font-size:14px;font-weight:700}
+  @media(max-width:720px){.navlinks{display:none}}
+
+  header.hero{padding:72px 0 46px;background:radial-gradient(900px 320px at 80% -10%,rgba(42,127,255,.18),transparent)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--sky);margin-bottom:16px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--sky)}
+  h1{font-size:41px;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px}
+  h1 span{background:linear-gradient(120deg,var(--blue),var(--sky));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lede{font-size:18px;color:var(--muted);max-width:660px;margin-bottom:26px}
+  .heractions{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-o{background:linear-gradient(135deg,var(--blue),var(--sky));color:#04101f;padding:13px 22px;border-radius:10px;font-weight:700;box-shadow:var(--shadow)}
+  .btn-ghost{padding:13px 20px;border-radius:10px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+  .chip{font-size:12.5px;color:var(--muted);border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:20px}
+  @media(max-width:720px){h1{font-size:30px}}
+
+  section{padding:52px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--sky);margin-bottom:10px}
+  h2{font-size:26px;letter-spacing:-.3px;margin-bottom:12px}
+  .sub{color:var(--muted);max-width:680px;margin-bottom:28px}
+
+  .arch{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start;margin-top:6px}
+  .layers{display:flex;flex-direction:column;gap:11px}
+  .layer{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 15px;cursor:pointer;transition:.16s;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .layer:hover{transform:translateX(3px);border-color:var(--blue)}
+  .layer.active{border-color:var(--blue);box-shadow:0 0 0 2px rgba(42,127,255,.22)}
+  .layer h5{font-size:15px}
+  .layer .tg{font-size:10px;color:var(--muted)}
+  .panel{background:linear-gradient(180deg,var(--bg2),var(--card));border:1px solid var(--line);border-radius:14px;padding:22px;position:sticky;top:78px;min-height:300px}
+  .panel .tag{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--violet);font-weight:700}
+  .panel h3{font-size:19px;margin:6px 0 10px}
+  .panel ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .panel li{font-size:14px;padding-left:22px;position:relative}
+  .panel li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;border-radius:3px;background:var(--blue)}
+  @media(max-width:820px){.arch{grid-template-columns:1fr}.panel{position:relative;top:0}}
+
+  .flow{display:flex;gap:0;flex-wrap:wrap}
+  .step{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);padding:16px;position:relative}
+  .step:first-child{border-radius:12px 0 0 12px}.step:last-child{border-radius:0 12px 12px 0}
+  .step .tool{font-size:11px;color:var(--sky);font-weight:700;margin-bottom:6px}
+  .step h5{font-size:13.5px;margin-bottom:3px}.step p{font-size:12px;color:var(--muted)}
+  .step .ar{position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--blue);font-size:18px;background:var(--bg);width:18px;text-align:center;z-index:2}
+  .step:last-child .ar{display:none}
+  @media(max-width:820px){.step{min-width:46%}}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .box .p{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--sky);font-weight:700}
+  .box h4{font-size:15px;margin:6px 0 4px}.box p2,.box p{font-size:13px}
+  .box p.d{font-size:13px;color:var(--muted)}
+  @media(max-width:820px){.grid3{grid-template-columns:1fr}}
+
+  .cta-sec{background:linear-gradient(135deg,#0f2036,#0b1626);border:1px solid var(--line);border-radius:18px;padding:38px;text-align:center}
+  .cta-sec p{color:var(--muted);max-width:560px;margin:0 auto 20px}
+  .fine{font-size:12px;color:#7f9abb;margin-top:14px}
+  footer{padding:32px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap navin">
+    <div class="brand"><span class="dot"></span> CrewNexa <span style="color:var(--muted);font-weight:500">× CWF</span></div>
+    <div class="navlinks">
+      <a href="#projects">Initial projects</a>
+      <a href="#stack">How it works</a>
+      <a href="#plan">First 90 days</a>
+    </div>
+    <a class="cta" href="#cta">Book a call</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Salesforce AI · for CWF</div>
+    <h1>Salesforce, from a CRM<br><span>to an intelligent operating system.</span></h1>
+    <p class="lede">You want Salesforce to tell your team what to do next, not just store what happened. Here is how we would add AI agents, scoring and OpenAI-powered workflows inside your Salesforce, starting with an Account Intelligence Agent.</p>
+    <div class="heractions">
+      <a class="btn-o" href="#projects">Explore the build</a>
+      <a class="btn-ghost" href="#cta">Book a call</a>
+    </div>
+    <div class="chips">
+      <span class="chip">Salesforce Flow</span><span class="chip">Apex</span><span class="chip">OpenAI API</span>
+      <span class="chip">Agentforce / Einstein</span><span class="chip">Scoring models</span><span class="chip">Dashboards</span>
+    </div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="kicker">Interactive</div>
+    <h2>Your initial projects, mapped</h2>
+    <p class="sub">Tap one to see how we would build it inside Salesforce. Each uses Flow, Apex and the OpenAI API where the judgement is needed.</p>
+    <div class="arch">
+      <div class="layers" id="layers"></div>
+      <div class="panel" id="panel">
+        <div class="tag" id="p-tag">Select a project</div>
+        <h3 id="p-title">AI account summaries</h3>
+        <ul id="p-list"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="kicker">How it works inside Salesforce</div>
+    <h2>Native where it counts, AI where it helps</h2>
+    <p class="sub">The AI lives behind Salesforce, so your team never leaves the platform they already use.</p>
+    <div class="flow">
+      <div class="step"><div class="tool">Salesforce data</div><h5>Trigger</h5><p>A record, a stage change or a schedule kicks it off.</p><span class="ar">→</span></div>
+      <div class="step"><div class="tool">Flow / Apex</div><h5>Gather</h5><p>Pull the account, activity and referral data together.</p><span class="ar">→</span></div>
+      <div class="step"><div class="tool">OpenAI</div><h5>Reason</h5><p>Summarise, score or recommend with a tuned prompt.</p><span class="ar">→</span></div>
+      <div class="step"><div class="tool">Salesforce</div><h5>Write back</h5><p>The result lands on the record and the dashboard.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="kicker">First 90 days</div>
+    <h2>What success looks like</h2>
+    <p class="sub">We aim straight at the outcomes you named, so there is something real in front of your BD team early.</p>
+    <div class="grid3">
+      <div class="box"><div class="p">Milestone 1</div><h4>Account Intelligence Agent</h4><p class="d">Deployed and live inside Salesforce, working on real accounts.</p></div>
+      <div class="box"><div class="p">Milestone 2</div><h4>Automated summaries</h4><p class="d">AI account summaries generated on demand and on schedule.</p></div>
+      <div class="box"><div class="p">Milestone 3</div><h4>Scoring and recommendations</h4><p class="d">An opportunity scoring framework and AI next-step recommendations for BD.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-sec">
+      <div class="kicker" style="color:var(--violet)">Let's talk</div>
+      <h2>See a real Salesforce and OpenAI build</h2>
+      <p>On a short call we will walk you through a working Salesforce and OpenAI implementation and show how the same approach maps to your Account Intelligence Agent.</p>
+      <a class="btn-o" href="#">Book a call</a>
+      <div class="fine">Prepared for Chicago Water &amp; Fire Restoration by CrewNexa.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div>© 2026 CrewNexa · Salesforce AI for CWF</div>
+    <div>Salesforce · Flow · Apex · OpenAI · Agentforce</div>
+  </div>
+</footer>
+
+<script>
+  var projects = [
+    {tag:"Flow · OpenAI", title:"AI account summaries", items:[
+      "Pull the account, contacts and recent activity in a Flow.",
+      "Send a tuned prompt to OpenAI for a clean summary.",
+      "Write the summary onto the account, on demand or nightly."]},
+    {tag:"Apex · Scoring", title:"Opportunity scoring", items:[
+      "Score opportunities on the signals that predict a win for CWF.",
+      "A transparent framework, not a black box.",
+      "Scores and reasons surfaced on the record and dashboard."]},
+    {tag:"Data · OpenAI", title:"Referral partner intelligence", items:[
+      "Rank referral partners by volume, value and recency.",
+      "AI notes on where each relationship stands.",
+      "Prompts for the BD team on who to nurture next."]},
+    {tag:"Flow · Analysis", title:"Sales activity analysis", items:[
+      "Roll up calls, emails and meetings per rep and account.",
+      "Spot gaps and stalled deals automatically.",
+      "Simple views management can trust."]},
+    {tag:"Geo · Flow", title:"Route and territory optimization", items:[
+      "Group work by location to cut drive time.",
+      "Balance territories across the team.",
+      "Feed the plan back into Salesforce."]},
+    {tag:"OpenAI · Coaching", title:"Coaching recommendations", items:[
+      "Compare each rep's activity to what works.",
+      "Generate specific, kind coaching notes.",
+      "Deliver them where managers already look."]},
+    {tag:"OpenAI · Research", title:"AI account research", items:[
+      "Pull public context on an account on request.",
+      "Summarise what matters for the next conversation.",
+      "Attach it to the Salesforce record."]},
+    {tag:"Integration", title:"OpenAI in Salesforce workflows", items:[
+      "A clean, secure OpenAI integration behind Flow and Apex.",
+      "Cost controls and logging built in.",
+      "Reusable across every agent above."]}
+  ];
+  var box=document.getElementById('layers');
+  projects.forEach(function(m,i){
+    var d=document.createElement('div');
+    d.className='layer'+(i===0?' active':'');
+    d.innerHTML='<h5>'+m.title+'</h5><span class="tg">'+m.tag+'</span>';
+    d.addEventListener('click',function(){
+      var all=document.querySelectorAll('.layer');
+      for(var k=0;k<all.length;k++){all[k].classList.remove('active');}
+      d.classList.add('active'); render(m);
+    });
+    box.appendChild(d);
+  });
+  function render(m){
+    document.getElementById('p-tag').textContent=m.tag;
+    document.getElementById('p-title').textContent=m.title;
+    var ul=document.getElementById('p-list'); ul.innerHTML='';
+    m.items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li);});
+  }
+  render(projects[0]);
+</script>
+</body>
+</html>
